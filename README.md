@@ -1,7 +1,7 @@
 # RPG-NodeJS
 
 This is my first RPG game made with NodeJS, jQuery, SocketIO, ExpressJS, MongoDB
-
+You can access it here: https://mystery-of-dungeons.herokuapp.com/ (Yes it have bugs. This was my first game though and with knowledge I got I will try to make a better game with also instead of jQuery using VueJS)
 1. Login / Register
 2. Choose type (magic, melee, ranged)
 3. Upgrade stats with points, you get points every level up. Max level is 100
