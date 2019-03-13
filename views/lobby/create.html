@@ -1,0 +1,36 @@
+<div class="row">
+        <div class="col-md-12">
+                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <strong><span class="panel-title">Create New Lobby</span></strong>
+                    </div>
+                <div class="panel-body" style="overflow: hidden">
+                    {{#if msg}}
+                    <div class="alert alert-success" role="alert">
+                            {{msg}}
+                    </div>                        
+                    {{/if}}
+
+                    {{#if errmsg}}
+                    <div class="alert alert-danger" role="alert">
+                            {{errmsg}}
+                    </div>                        
+                    {{/if}}                    
+                <div class="text-center">
+                    <img src="/img/torch.gif" style="height: 45px"><span style="font-family: 'Inconsolata'; font-size: 20px">Lobby</span><img src="/img/torch.gif" style="height: 45px">
+                    
+                    <form style="margin: 0 auto" class="form-group col-md-6" action="/create-lobby" method="POST">
+                        <p>All fields are required.</p>
+                        <input type="text" class="form-control" name="title" id="title" required placeholder="Lobby title">
+                        <i>Minimum length of title: 3</i><br>
+                        <i>Maximum length of title: 10</i><br>
+                        <input type="password" class="form-control" name="password" placeholder="Lobby password">
+                        <i>Minimum length of password: 3</i><br>
+                        <button type="submit" class="btn btn-danger">Create Lobby</button>
+                    </form>
+                    
+                </div> 
+
+                </div>
+        </div>
+</div>

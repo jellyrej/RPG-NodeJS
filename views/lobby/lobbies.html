@@ -1,0 +1,40 @@
+<div class="row">
+        <div class="col-md-8">
+                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <strong><span class="panel-title">Lobbies List {{lobby.title}}</span></strong>
+                    </div>
+                <div class="panel-body">
+                    
+                <div class="text-center">
+                    <img src="/img/torch.gif" style="height: 45px"><span style="font-family: 'Inconsolata'; font-size: 20px">Lobbies List</span><img src="/img/torch.gif" style="height: 45px">
+                </div> 
+              <div class="row text-center">
+                                {{#each lobbies}}
+                <div class="col-md-4">
+                  <small>
+                  <p><strong><span class="title">{{this.title}}</span></strong></p>
+                  <p>Leader: {{this.leader}}</p>
+                  <p>Created at: {{this.created_at}}</p>
+                  <p>Players:
+                  {{#each usersinlobby}}
+                    {{this.username}}</p>
+                  {{/each}}
+                  <a href="/join-lobby" class="btn btn-danger" id="join">Join</a>
+                </small>
+              </div>
+                {{/each}}
+            </div>
+        </div>
+        </div>
+        </div>
+        {{> userInterface}}
+        </div>
+
+<script type="text/javascript">
+  $("#join").on('click', () => {
+    socket.emit('access-lobby', {
+      title: $(".title").text()
+    });
+  });
+</script>

@@ -1,0 +1,183 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong><span class="panel-title">Lobby {{lobby.title}} <span hidden id="lobbyId">{{lobby._id}}</span></span></strong>
+            </div>
+            <div class="panel-body">
+
+                <div class="text-center">
+                    <img src="/img/torch.gif" style="height: 45px"><span style="font-family: 'Inconsolata'; font-size: 20px">Lobby
+                        of {{lobby.title}}</span><img src="/img/torch.gif" style="height: 45px">
+                    <br>
+                    <span id="find-match">
+                        {{#if (eq lobby.searching 1)}}
+                        <button class="btn btn-danger">Searching for match...</button>
+                        <button class="btn btn-warning cancelSearchBtn">Cancel search</button>
+                        {{else if (eq lobby.players 5)}}
+                        <button class="btn btn-success" id="find-match-btn">Find Match</button>
+                        {{else}}
+                        {{/if}}
+                    </span>
+                    <a href="/leave-lobby" class="btn btn-warning" id="lobby-leave-btn" style="float: right">Leave</a>
+                    <p style="float: left"><strong>Leader: </strong><span class="lobby-leader">{{lobby.leader}}</span><br>
+                        <strong>Players: <span id="playersCount">{{joinedPlayers}}</span>/5</strong></p>
+                    <br>
+                </div>
+                <br><br>
+                <div class="players">
+                    {{#each users}}
+                    <div class="player" id="{{this.username}}">
+                        {{#if alliance}}
+                        Alliance:<br><span style="color: red">[</span>{{alliance}}<span style="color: red">]</span>
+                        <br>
+                        {{else}}
+                        Alliance:<br>None<br>
+                        {{/if}}
+                        {{#each usersInLobby}}
+                        <img src="/img/chars/{{skin}}.png" style="height: 85px;">
+                        <p>{{username}}<br>
+                            Level: {{level}}</p>
+                        {{/each}}
+                    </div>
+                    {{/each}}
+                </div>
+                <p><strong>Chatroom</strong></p>
+                <hr>
+                <div class="lobbychat">
+                    {{#each lobbyMessages}}
+                    <p class="message">
+                        <small>{{this.createdAt}} <strong><a href="/character/" class="user-link"><span class="username">{{this.username}}</span></a>
+                            </strong>{{this.message}}</small><br>
+                        <p>
+                            {{/each}}
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="message">
+                    <span class="input-group-btn" style="height: 0px">
+                        <button class="btn btn-default" type="button" id="lobby-sent-btn">Send</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{> userInterface}}
+</div>
+
+<script type="text/javascript">
+    var lobbyID = $("#lobbyId").text();
+    var username = $('#username').text();
+    var lobbyLeader = $(".lobby-leader").text();
+    var playersCount = +$("#playersCount").text();
+
+    socket.on('join-lobby', (data) => {
+        if (lobbyID === data.lobbyID) {
+            if (data.alliance != 'None') {
+                $('.players').prepend('<div class="player" id="' + data.username +
+                    '">Alliance:<br><span style="color: red">[</span>' + data.alliance +
+                    '<span style="color: red">]</span><br><img src="/img/chars/' + data.skin +
+                    '.png" style="height: 85px;"><p>' + data.username + '<br>Level: ' + data.level +
+                    '</div>');
+            } else {
+                $('.players').prepend('<div class="player">Alliance:<br>' + data.alliance +
+                    '<br><img src="/img/chars/' + data.skin + '.png" style="height: 85px;"><p>' + data.username +
+                    '<br>Level: ' + data.level + '</div>');
+            }
+            document.getElementById("playersCount").innerHTML = data.playerCount;
+            $(".lobbychat").prepend('<p class="message" style="color: #7FFF00"><small>' + data.created_at +
+                '<strong> ' + data.username + '</strong> just joined the lobby.</small><br><p>');
+        }
+    });
+
+    $("#lobby-sent-btn").on('click', () => {
+
+        var message = $('#message').val();
+        var length = message.replace(/\s/g, "");
+        if (length.length < 3) {
+            $('#message').val('');
+            $('#message').attr("placeholder", "Min length 3 chars");
+        } else {
+            $('#message').val('');
+            $('#message').attr("placeholder", "Sent!");
+            socket.emit('lobby-msg', {
+                username: username,
+                message: message,
+                lobbyId: lobbyID
+            });
+        }
+    });
+
+    socket.on('lobby-msg-sent', (data) => {
+        if (data.lobbyId === lobbyID) {
+            $(".lobbychat").prepend('<p class="message"><small>' + data.createdAt +
+                '<strong><ahref="/character/"class="user-link" style="color: black"> ' + data.username +
+                '</a></strong> ' + data.message + '</small><br><p>');
+        }
+    });
+
+    $("#lobby-leave-btn").on('click', () => {
+        socket.emit('lobby-left', {
+            lobbyID: lobbyID,
+            username: username
+        });
+    });
+
+    socket.on('lobby-left-username', (data) => {
+        if (data.lobbyID === lobbyID) {
+            $(".lobbychat").prepend('<p class="message" style="color: yellow"><small>' + data.createdAt +
+                '<strong> ' + data.username + '</strong> just left the lobby.</small><br><p>');
+            document.getElementById(data.username).remove();
+            playersCount = playersCount - 1;
+            document.getElementById("playersCount").innerHTML = playersCount;
+            if (playersCount < 5) {
+                document.getElementById("find-match").innerHTML = '';
+            }
+        }
+    });
+
+    socket.on('find-match', (data) => {
+        if (data.lobbyID === lobbyID) {
+            document.getElementById("find-match").innerHTML =
+                '<button class="btn btn-success" id="find-match-btn">Find Match</button>';
+        }
+    });
+
+    $('#find-match').on('click', '#find-match-btn', () => {
+        if (username === lobbyLeader) {
+            socket.emit('searching-for-match');
+        }
+    });
+
+    socket.on('searching-for-match', (data) => {
+        if (data.lobbyID === lobbyID) {
+            document.getElementById("find-match").innerHTML =
+                '<button class="btn btn-danger">Searching for match...</button>' +
+                '<button class="btn btn-warning cancelSearchBtn">Cancel search</button>';
+
+            $(".cancelSearchBtn").on('click', () => {
+                if (username === lobbyLeader) {
+                    socket.emit('cancel-searching');
+
+                    document.getElementById("find-match").innerHTML = '<button class="btn btn-success" id="find-match-btn">Find Match</button>';   
+                }
+            });
+
+        }
+    });
+
+    socket.on('stop-searching-for-match', (data) => {
+        if (data.lobbyID === lobbyID) {
+            document.getElementById("find-match").innerHTML = '';
+        }
+    })
+
+    socket.on('match-found', (data) => {
+        if (data.lobbyID === lobbyID) {
+            window.location.href = '/match/' + data.matchID;
+        }
+        if (data.enemyID === lobbyID) {
+            window.location.href = '/match/' + data.matchID;
+        }
+    });
+
+</script>

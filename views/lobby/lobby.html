@@ -1,0 +1,33 @@
+<div class="row">
+        <div class="col-md-8">
+                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <strong><span class="panel-title">Join Lobby</span></strong>
+                    </div>
+                <div class="panel-body">
+                    
+                <div class="text-center">
+                    <img src="/img/torch.gif" style="height: 45px"><span style="font-family: 'Inconsolata'; font-size: 20px">Join Lobby</span><img src="/img/torch.gif" style="height: 45px">
+                </div> 
+                
+                        <p>Password</p>
+                        <input type="text" class="form-control" name="password" id="password" placeholder="Password of a lobby">
+                        <button id="enter-lobby" class="btn btn-danger">Join</button>
+                      
+        </div>
+        </div>
+        </div>
+        {{> userInterface}}
+        </div>
+<script type="text/javascript">
+$( "#enter-lobby" ).click(function( event ) {
+    socket.emit('join-lobby-password', {
+        username: $("#username").text(),
+        password: $("#password").val(),
+    });
+});
+
+socket.on('redirect-to-lobby', (data) => {
+    window.location.href = '/lobby/'+data.lobbyID;
+});
+</script>

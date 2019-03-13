@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong><span class="panel-title">Available Quests</span></strong>
+            </div>
+            <div class="panel-body">
+                <ul class="list-unstyled">
+                    {{#each quests}}
+                    <li>
+                        <h4><img src="/img/quest.png"> {{this.title}}
+                        <br><small>Recommended level: {{this.level}}</small>
+                        </h4>
+                        <p class="quest-body">
+                            {{this.intro}}
+                            <br><br>
+                            <!-- Reward: <img src="/img/gold.png" style="margin-top: -0.5%"> 200 &nbsp; Exp: 140
+                            &nbsp; Item: <img src="/img/quests/hat.png"> -->
+                            <a href="/quests/id/{{this._id}}" class="btn btn-danger float-right quest-button">Start Quest</a>  
+                        </p>
+                        <div style="clear: both"></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {{> userInterface}}
+</div>

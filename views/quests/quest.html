@@ -1,0 +1,37 @@
+<div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><span class="panel-title">Available Quests</span></strong>
+                </div>
+                <div class="panel-body">
+                            <h4><img src="/img/quest.png"> {{quest.title}}
+                            <br><small>Recommended level: {{quest.level}}</small>
+                            </h4>
+                            <p class="quest-body">
+                                {{quest.description}}
+                                This is the steps you need to do: 
+                                <ol>
+                                    <li>Receive the secret key to access the special room of dungeon.</li>
+                                    <li>When you enter the special room of the dungeon you will need to kill 
+                                        evil elf.
+                                    </li>
+                                    <li>Once you have killed the elf you can access the "Quest" category
+                                        in the market. In there you will take a component which is needed to mix elements.
+                                    </li>
+                                    <li>Put the component in Grand Exchange and you will finally receive a Santa Claus hat.</li>
+                                </ol>
+                                <br><br>
+                                <!-- Reward: <img src="/img/gold.png" style="margin-top: -0.5%"> 200 &nbsp; Exp: 140
+                                &nbsp; Item: <img src="/img/quests/hat.png"> -->
+                                {{#if userQuest}}
+                                <p>You already have a quest in progress.</p>
+                                {{else}}
+                                <a href="/quest/begin/id/{{quest._id}}">Begin Quest</a>
+                                {{/if}}
+                            </p>
+                </div>
+            </div>
+        </div>
+        {{> userInterface}}
+    </div>

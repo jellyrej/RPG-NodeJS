@@ -1,0 +1,27 @@
+<div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><span class="panel-title">Achievements</span></strong>
+                </div>
+                <div class="panel-body">
+                    <p>Unlocked: {{results.length}} / {{allAchievements.length}}</p>
+                        {{#each results}}
+                            <h4>
+                                {{this.title}}
+                            </h4>
+
+                            {{#each completeds}}
+
+                                <p><span style="color: #7cff64">Completed</span></p>
+                            {{/each}}
+
+                            <p class="quest-body">{{this.description}}<br>
+                            <small>Reward: <img src="/img/gold.png" style="height: 12px; margin-top: -2px"> {{this.gold}} | Experience: {{this.exp}}</small>
+                            </p>
+                        {{/each}}
+                </div>
+            </div>
+        </div>
+        {{> userInterface}}
+    </div>

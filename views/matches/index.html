@@ -1,0 +1,193 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong><span class="panel-title">Match {{match.lobby_one_title}} vs {{match.lobby_two_title}}</span></strong>
+            </div>
+            <div id="gameplay">
+                <div class="panel-body">
+
+                    <div class="text-center">
+                        <img src="/img/torch.gif" style="height: 45px"><span style="font-family: 'Inconsolata'; font-size: 20px">
+                            {{match.lobby_one_title}} vs {{match.lobby_two_title}}</span><img src="/img/torch.gif"
+                            style="height: 45px">
+                        <br>
+                    </div>
+                    <br><br>
+                    <div class="players">
+
+                        {{#each users}}
+                        <div class="player">
+                            {{#each players}}
+                            <p>
+                                {{#if alliance}}
+                                <span style="color: red">[</span>{{alliance}}<span style="color: red">]</span>
+                                {{/if}}
+                                {{username}}</p>
+                            {{/each}}
+                            <p>Level: {{level}}</p>
+                            <p>Type: {{type}}</p>
+                            <img src="/img/chars/{{skin}}.png" style="height: 85px;">
+                            <p>
+                                <img src="/img/market/str.png" style="height: 20px">
+                                Strength: <strong><span id="userStr">{{strength}}</span></strong></p>
+                            <p>
+                                <img src="/img/market/dex.png" style="height: 20px">
+                                Dexterity: <strong><span id="userDex">{{dexterity}}</span></strong></p>
+                            <p>
+                                <img src="/img/market/vit.png" style="height: 20px">
+                                Vitality: <strong><span id="userVit">{{vitality}}</span></strong></p>
+                            <p>
+                                <img src="/img/market/intel.png" style="height: 20px">
+                                Intellect: <strong><span id="userIntel">{{intellect}}</span></strong></p>
+
+                            {{#each playersItems}}
+                            <div class="popup" onclick="itemPopup('myPopup{{_id}}')">
+
+                                {{#if (eq this.item_type "Health")}}
+
+                                {{else}}
+                                <img src="{{item_img}}" class="itemId" alt="">
+                                {{/if}}
+                                <span class="popuptext" id="myPopup{{this._id}}">
+                                    {{#if (eq this.item_type "Dexterity")}}
+                                    Increased dexterity power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Strength")}}
+                                    Increased strength power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Vitality")}}
+                                    Increased vitality power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Intellect")}}
+                                    Increased intellect power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Health")}}
+                                    Not usable
+                                    {{/if}}
+                                </span>
+                            </div>
+                            {{/each}}
+                        </div>
+                        {{/each}}
+
+                    </div>
+                    <div class="progress position-relative" style="background-color: red">
+                        <div class="progress-bar enemy-bar" role="progressbar" id="enemyBar" style="width: 100%"
+                            aria-valuenow="500" aria-valuemin="0" aria-valuemax="100"></div>
+                        <small class="justify-content-center d-flex position-absolute w-100"><strong>
+                                HP:<span id="userHealth">\{{userHealth}}</span>/500</strong></small>
+                    </div>
+
+                    <button class="btn btn-danger attBtn" @click="attack" id="{{enemy._id}}" style="font-size: 24px"><span id="innerAttBtn">Attack
+                            👊🏼</span></button>
+                    <span id="loading-image"></span>
+                    <div class="progress position-relative" style="background-color: red">
+                        <div class="progress-bar enemy-bar" role="progressbar" id="enemyBar" style="width: 100%"
+                            :style="{width: enemyWidth + '%'}" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <small class="justify-content-center d-flex position-absolute w-100"><strong>
+                                HP:\{{enemyHealth}}/500</strong></small>
+                    </div>
+
+                    <div class="players">
+                        {{#each usersSecondLobby}}
+
+                        <div class="player">
+                            {{#each playersSecondLobby}}
+                            <p>
+                                {{#if alliance}}
+                                <span style="color: red">[</span>{{alliance}}<span style="color: red">]</span>
+                                {{/if}}
+                                {{username}}</p>
+                            {{/each}}
+                            <p>Level: {{level}}</p>
+                            <p>Type: {{type}}</p>
+                            <img src="/img/chars/{{skin}}.png" style="height: 85px;">
+                            <p>
+                                <img src="/img/market/str.png" style="height: 20px">
+                                Strength: <strong><span id="userStr">{{strength}}</span></strong></p>
+                            <p>
+                                <img src="/img/market/dex.png" style="height: 20px">
+                                Dexterity: <strong><span id="userDex">{{dexterity}}</span></strong></p>
+                            <p>
+                                <img src="/img/market/vit.png" style="height: 20px">
+                                Vitality: <strong><span id="userVit">{{vitality}}</span></strong></p>
+                            <p>
+                                <img src="/img/market/intel.png" style="height: 20px">
+                                Intellect: <strong><span id="userIntel">{{intellect}}</span></strong></p>
+
+                            {{#each playersSecondLobbyItems}}
+                            <div class="popup" onclick="itemPopup('myPopup{{_id}}')">
+
+                                {{#if (eq this.item_type "Health")}}
+
+                                {{else}}
+                                <img src="{{item_img}}" class="itemId" alt="">
+                                {{/if}}
+                                <span class="popuptext" id="myPopup{{this._id}}">
+                                    {{#if (eq this.item_type "Dexterity")}}
+                                    Increased dexterity power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Strength")}}
+                                    Increased strength power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Vitality")}}
+                                    Increased vitality power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Intellect")}}
+                                    Increased intellect power by <span class="power">{{this.item_power}}</span> points
+                                    {{/if}}
+                                    {{#if (eq this.item_type "Health")}}
+                                    Not usable
+                                    {{/if}}
+                                </span>
+                            </div>
+                            {{/each}}
+                        </div>
+                        {{/each}}
+
+                    </div>
+
+                    <p><strong>Chatroom</strong></p>
+                    <hr>
+                    <div class="lobbychat">
+                        {{#each lobbyMessages}}
+                        <p class="message">
+                            <small>{{this.createdAt}} <strong><a href="/character/" class="user-link"><span class="username">{{this.username}}</span></a>
+                                </strong>{{this.message}}</small><br>
+                            <p>
+                                {{/each}}
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="message">
+                        <span class="input-group-btn" style="height: 0px">
+                            <button class="btn btn-default" type="button" id="lobby-sent-btn">Send</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function itemPopup(ID) {
+        var popup = document.getElementById(ID);
+        popup.classList.toggle("show");
+    }
+
+    new Vue({
+        el: '#gameplay',
+        data: {
+            enemyHealth: 500,
+            userHealth: 500,
+            enemyWidth: 100
+        },
+        methods: {
+            attack: function() {
+                var damage = 20;
+                this.enemyHealth -= damage;
+                this.enemyWidth = this.enemyHealth / 500 * 100;
+            }
+        }
+    });
+</script>

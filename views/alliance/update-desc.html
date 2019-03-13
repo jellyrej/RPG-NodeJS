@@ -1,0 +1,21 @@
+<div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><span class="panel-title">Update Alliance Description</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="text-center">
+                        
+                        <form action="/update-alliance-description" method="POST" class="form-group col-md-8" style="margin: 0 auto">
+                            <textarea name="description" id="description" class="form-control" cols="30" rows="5">
+                                {{alliance.description}}
+                            </textarea>
+                            <button type="submit" class="btn btn-success">Update Description</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

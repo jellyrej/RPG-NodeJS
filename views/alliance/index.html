@@ -1,0 +1,71 @@
+<div class="row">
+        <div class="col-md-12">
+                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <strong><span class="panel-title">Alliances Of Dungeons</span></strong>
+                    </div>
+                <div class="panel-body" style="overflow: hidden">                 
+                <div class="text-center">
+                    <img src="/img/torch.gif" style="height: 45px"><span style="font-family: 'Inconsolata'; font-size: 20px">Alliances</span><img src="/img/torch.gif" style="height: 45px">
+                    <br>
+                    {{#if member}}
+                    {{else}}
+                    <a href="/create-alliance" class="btn btn-danger">Create Alliance</a>
+                    {{/if}}
+                    <ul class="list-unstyled">
+                        
+                    {{#if member}}
+                    <p>You cannot join any of alliances until you leave your <a href="/alliance-information">current alliance</a>.</p>  
+
+                        {{#each alliances}}
+                        
+                           <strong>{{this.title}}</strong>
+                           <span class="allianceId" hidden>{{this._id}}</span>
+                           <br>
+                           Experience: {{this.expCount}}<br>
+                           Members: {{allymembers.length}}<br>
+                           Bank: {{this.bank}}
+                           <hr>
+                        {{/each}}
+
+                    {{else}}
+                    <p>List of all alliances in the game</p>
+
+                        {{#each alliances}}
+                        
+                           <strong>{{this.title}}</strong>
+                           <span class="allianceId" hidden>{{this._id}}</span>
+                           <br>
+                           Experience: {{this.expCount}}<br>
+                           Members: {{allymembers.length}}<br>
+                           Bank: {{this.bank}}<br>
+                           <a href="/join-alliance/{{this.title}}" id="{{this._id}}" class="btn btn-success join">Join</a>                           
+                           <hr>
+                        {{/each}}
+
+                    {{#each userRequests}}
+                        <span class="userAllyId" hidden>{{this.ally_id}}</span>
+                    {{/each}}
+
+                    {{/if}}
+                    </ul>
+                </div> 
+                </div>
+        </div>
+</div>
+
+<script>
+   const alliances = document.getElementsByClassName("userAllyId");
+   let allyArray = [];
+
+   for(let i = 0; i < alliances.length; i++) {
+      allyArray.push(alliances[i].innerHTML);
+   }
+
+ $(".join").each(function() {
+       if(allyArray.indexOf($(this).attr("id")) > -1)
+          $(this).remove();
+  });  
+
+
+</script>
